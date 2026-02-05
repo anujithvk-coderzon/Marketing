@@ -1,0 +1,80 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+ enum UserRole {
+  Admin
+  User
+ }
+  enum CampaignStatus {
+    Draft
+    Scheduled
+    Sending
+    Sent
+    Cancelled
+  }
+model User{
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+  role   UserRole @default(User)
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("users")
+}
+
+  model Email {
+    id          String   @id @default(uuid())
+    email       String   @unique
+    firstName   String?
+    lastName    String?
+    isActive    Boolean  @default(true)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    campaigns   CampaignRecipient[]
+    @@map("emails")
+  }
+
+  model Template {
+    id          String   @id @default(uuid())
+    name        String   @unique()
+    subject     String
+    body        String   
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    campaigns   Campaign[]
+    @@map("templates")
+  }
+
+  model Campaign {
+    id            String         @id @default(uuid())
+    name          String
+    status        CampaignStatus @default(Draft)
+    scheduledAt   DateTime?
+    sentAt        DateTime?
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+    templateId    String
+    template      Template       @relation(fields: [templateId], references: [id])
+    recipients    CampaignRecipient[]
+    @@map("campaigns")
+  }
+
+  model CampaignRecipient {
+    campaignId  String
+    emailId     String
+    status      String    @default("pending") 
+    sentAt      DateTime?
+    campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+    email       Email     @relation(fields: [emailId], references: [id], onDelete: Cascade)
+    @@id([campaignId, emailId])
+    @@map("campaign_recipients")
+  }

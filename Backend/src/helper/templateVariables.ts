@@ -1,4 +1,4 @@
-interface RecipientData {
+export interface RecipientData {
     email: string;
     name?: string | null;
     phone?: string | null;

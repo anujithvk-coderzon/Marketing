@@ -7,7 +7,7 @@ import { prisma } from "../library/prisma";
 import { asyncWrapper } from "../middlewares/asyncWrapper";
 import { Request,Response } from "express";
 import { removeCampaignJob, scheduleCampaignJob } from "../helper/bullMq";
-import { replaceVariables } from "../helper/templateVariables";
+import { replaceVariables, RecipientData } from "../helper/templateVariables";
 
 export const sendEmail = asyncWrapper(async function (req: Request, res: Response) {
     const validation = sendMailValidation.safeParse(req.body)
@@ -19,9 +19,9 @@ export const sendEmail = asyncWrapper(async function (req: Request, res: Respons
         const recipients = await prisma.email.findMany({
             where: { email: { in: emailList } }
         })
-        const recipientMap = new Map(recipients.map(r => [r.email.toLowerCase(), r]))
+        const recipientMap = new Map(recipients.map((r: RecipientData) => [r.email.toLowerCase(), r]))
         for (const addr of emailList) {
-            const data = recipientMap.get(addr.toLowerCase()) || { email: addr }
+            const data: RecipientData = recipientMap.get(addr.toLowerCase()) || { email: addr }
             await sendEmails({
                 to: addr,
                 subject: replaceVariables(subject, data),
@@ -151,8 +151,8 @@ export const fetchEmailFilters=asyncWrapper(async function (req:Request,res:Resp
         }),
     ])
     res.status(200).json({
-        districts: districts.map(d => d.district),
-        states: states.map(s => s.state),
+        districts: districts.map((d: { district: string | null }) => d.district),
+        states: states.map((s: { state: string | null }) => s.state),
     })
 })
 

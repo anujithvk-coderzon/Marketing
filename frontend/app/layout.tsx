@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Coderzon - Marketing Software",
+  title: "Coderzon Marketing Management",
   description: "Email marketing campaign management platform",
 };
 

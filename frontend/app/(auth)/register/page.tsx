@@ -184,7 +184,7 @@ const Page = () => {
               Create your account
             </h2>
             <p className="text-slate-500 mt-2 text-sm sm:text-base">
-              Start your free trial. No credit card required.
+              Register to access the marketing platform.
             </p>
           </div>
 

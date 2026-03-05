@@ -1,0 +1,19 @@
+import { Request, Response } from "express";
+export declare const sendEmail: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const createTemplate: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const editTemplate: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const deleteTemplate: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const fetchTemplates: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const fetchEmails: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const fetchEmailFilters: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const createCampaign: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const fetchCampaigns: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const csvEmails: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const deleteEmail: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const editEmail: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const editCampaign: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const fetchCampaignRecipients: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const cancelCampaign: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const createEmail: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const deleteCampaign: (req: Request, res: Response, next: import("express").NextFunction) => void;
+//# sourceMappingURL=FunctionsController.d.ts.map

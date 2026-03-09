@@ -42,6 +42,7 @@ const Page = () => {
       }
     } catch (error) {
       if (isAxiosError(error)) {
+        const status = error.response?.status;
         const errors = error.response?.data.errors;
         if (errors && errors.length > 0) {
           errors.forEach((err: { field: string; message: string }) =>
@@ -49,6 +50,11 @@ const Page = () => {
           );
         } else {
           errorToast(error.response?.data.message);
+        }
+        if (status === 404) {
+          setTimeout(() => {
+            route.push("/register");
+          }, 1500);
         }
       }
     }

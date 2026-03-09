@@ -11,7 +11,8 @@ import { sendEmails } from '../helper/emailService';
 
 const USER_ERRORS={
     alreadyExist:"User already exist with this email address",
-    invalidData:"Invalid email or password"
+    notFound:"Account doesn't exist with this email",
+    invalidPassword:"Incorrect password"
 }
 
 export const registerUser=asyncWrapper(async function (req:Request,res:Response) {
@@ -65,9 +66,9 @@ export const loginUser=asyncWrapper(async function (req:Request,res:Response) {
     if(!validation.success) throw new ValidationError(validation.error)
     const {email,password}=validation.data;
     const existingUser=await prisma.user.findUnique({where:{email}})
-    if(!existingUser) throw new BadRequest(USER_ERRORS.invalidData)
+    if(!existingUser) throw new NotFoundError(USER_ERRORS.notFound)
     const passwordValidate=await compare(password,existingUser.password)
-    if(!passwordValidate) throw new BadRequest(USER_ERRORS.invalidData)
+    if(!passwordValidate) throw new BadRequest(USER_ERRORS.invalidPassword)
     const accessToken=jwt.sign({id:existingUser.id},process.env.ACCESS_TOKEN_SECRET!,{expiresIn:'1h'})
     const refreshToken=jwt.sign({id:existingUser.id},process.env.REFRESH_TOKEN_SECRET!,{expiresIn:'7d'})
     await redis.set(`refresh:${existingUser.id}`,refreshToken,{EX:7*24*60*60})
